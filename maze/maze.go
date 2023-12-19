@@ -17,34 +17,34 @@ const (
 )
 
 type Block struct {
-	blockType int
+	BlockType int
 }
 type Maze struct {
-	height int
-	width  int
-	blocks [][]Block
+	Height int
+	Width  int
+	Blocks [][]Block
 }
 
 func NewMaze(h, w int) *Maze {
 	m := &Maze{
-		height: h,
-		width:  w,
-		blocks: make([][]Block, h),
+		Height: h,
+		Width:  w,
+		Blocks: make([][]Block, h),
 	}
 	for i := 0; i < h; i++ {
-		m.blocks[i] = make([]Block, w)
+		m.Blocks[i] = make([]Block, w)
 	}
 	return m
 }
 
 func (m *Maze) SetStart(x, y int) {
-	m.blocks[y][x] = Block{blockType: Start}
+	m.Blocks[y][x] = Block{BlockType: Start}
 }
 
 func (m *Maze) GetStart() (int, int) {
-	for y := 0; y < m.height; y++ {
-		for x := 0; x < m.width; x++ {
-			if m.blocks[y][x].blockType == Start {
+	for y := 0; y < m.Height; y++ {
+		for x := 0; x < m.Width; x++ {
+			if m.Blocks[y][x].BlockType == Start {
 				return x, y
 			}
 		}
@@ -53,11 +53,11 @@ func (m *Maze) GetStart() (int, int) {
 }
 
 func (m *Maze) SetGoal(x, y int) {
-	m.blocks[y][x] = Block{blockType: Goal}
+	m.Blocks[y][x] = Block{BlockType: Goal}
 }
 
 func (m *Maze) SetObstacle(x, y int) {
-	m.blocks[y][x] = Block{blockType: Obstacle}
+	m.Blocks[y][x] = Block{BlockType: Obstacle}
 }
 
 func drawHorizontalLine(w int) {
@@ -68,11 +68,11 @@ func drawHorizontalLine(w int) {
 }
 
 func (m *Maze) Print() {
-	drawHorizontalLine(m.width)
-	for y := 0; y < m.height; y++ {
+	drawHorizontalLine(m.Width)
+	for y := 0; y < m.Height; y++ {
 		fmt.Print("|")
-		for x := 0; x < m.width; x++ {
-			switch m.blocks[y][x].blockType {
+		for x := 0; x < m.Width; x++ {
+			switch m.Blocks[y][x].BlockType {
 			case Empty:
 				fmt.Print(" |")
 			case Obstacle:
@@ -84,15 +84,15 @@ func (m *Maze) Print() {
 			}
 		}
 		fmt.Print("\n")
-		drawHorizontalLine(m.width)
+		drawHorizontalLine(m.Width)
 	}
 }
 
 func (m *Maze) isAvailable(x, y int, seen [][]bool) bool {
-	if x < 0 || x >= m.width || y < 0 || y >= m.height {
+	if x < 0 || x >= m.Width || y < 0 || y >= m.Height {
 		return false
 	}
-	if m.blocks[y][x].blockType == Obstacle {
+	if m.Blocks[y][x].BlockType == Obstacle {
 		return false
 	}
 	if seen[y][x] {
@@ -102,7 +102,7 @@ func (m *Maze) isAvailable(x, y int, seen [][]bool) bool {
 }
 
 func (m *Maze) isGoal(x, y int) bool {
-	return m.blocks[y][x].blockType == Goal
+	return m.Blocks[y][x].BlockType == Goal
 }
 
 func (m *Maze) dfs(x, y int, seen [][]bool) bool {
@@ -124,9 +124,9 @@ func (m *Maze) ExistPath() bool {
 	if startX == -1 || startY == -1 {
 		return false
 	}
-	seen := make([][]bool, m.height)
-	for i := 0; i < m.height; i++ {
-		seen[i] = make([]bool, m.width)
+	seen := make([][]bool, m.Height)
+	for i := 0; i < m.Height; i++ {
+		seen[i] = make([]bool, m.Width)
 	}
 
 	return m.dfs(startX, startY, seen)
