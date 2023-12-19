@@ -1,6 +1,9 @@
 package maze
 
-import "fmt"
+import (
+	"errors"
+	"fmt"
+)
 
 const (
 	Empty = iota
@@ -41,19 +44,30 @@ func (m *Maze) SetStart(x, y int) {
 	m.Blocks[y][x] = Block{BlockType: Start}
 }
 
-func (m *Maze) GetStart() (int, int) {
+func (m *Maze) GetStart() (int, int, error) {
 	for y := 0; y < m.Height; y++ {
 		for x := 0; x < m.Width; x++ {
 			if m.Blocks[y][x].BlockType == Start {
-				return x, y
+				return x, y, nil
 			}
 		}
 	}
-	return -1, -1
+	return -1, -1, errors.New("start not found")
 }
 
 func (m *Maze) SetGoal(x, y int) {
 	m.Blocks[y][x] = Block{BlockType: Goal}
+}
+
+func (m *Maze) GetGoal() (int, int, error) {
+	for y := 0; y < m.Height; y++ {
+		for x := 0; x < m.Width; x++ {
+			if m.Blocks[y][x].BlockType == Goal {
+				return x, y, nil
+			}
+		}
+	}
+	return -1, -1, errors.New("goal not found")
 }
 
 func (m *Maze) SetObstacle(x, y int) {
@@ -101,33 +115,34 @@ func (m *Maze) isAvailable(x, y int, seen [][]bool) bool {
 	return true
 }
 
-func (m *Maze) isGoal(x, y int) bool {
-	return m.Blocks[y][x].BlockType == Goal
-}
-
-func (m *Maze) dfs(x, y int, seen [][]bool) bool {
+func (m *Maze) dfs(x, y, endX, endY int, seen [][]bool) bool {
 	if !m.isAvailable(x, y, seen) {
 		return false
 	}
 	seen[y][x] = true
-	if m.isGoal(x, y) {
+	if x == endX && y == endY {
 		return true
 	}
-	if m.dfs(x+1, y, seen) || m.dfs(x, y+1, seen) || m.dfs(x-1, y, seen) || m.dfs(x, y-1, seen) {
+	if m.dfs(x+1, y, endX, endY, seen) || m.dfs(x, y+1, endX, endY, seen) || m.dfs(x-1, y, endX, endY, seen) || m.dfs(x, y-1, endX, endY, seen) {
 		return true
 	}
 	return false
 }
 
 func (m *Maze) ExistPath() bool {
-	startX, startY := m.GetStart()
-	if startX == -1 || startY == -1 {
+	startX, startY, error := m.GetStart()
+	if error != nil {
 		return false
 	}
+	endX, endY, error := m.GetGoal()
+	if error != nil {
+		return false
+	}
+
 	seen := make([][]bool, m.Height)
 	for i := 0; i < m.Height; i++ {
 		seen[i] = make([]bool, m.Width)
 	}
 
-	return m.dfs(startX, startY, seen)
+	return m.dfs(startX, startY, endX, endY, seen)
 }
