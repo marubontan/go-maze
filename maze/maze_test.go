@@ -18,14 +18,19 @@ func TestMazeInit(t *testing.T) {
 
 func TestMazeSetter(t *testing.T) {
 	tests := []struct {
-		x      int
-		y      int
-		mazeX  int
-		mazeY  int
-		target string
+		x       int
+		y       int
+		mazeX   int
+		mazeY   int
+		target  string
+		isError bool
 	}{
-		{x: 0, y: 1, mazeX: 2, mazeY: 2, target: "Start"},
-		{x: 2, y: 1, mazeX: 3, mazeY: 2, target: "Goal"},
+		{x: 0, y: 1, mazeX: 2, mazeY: 2, target: "Start", isError: false},
+		{x: -1, y: 1, mazeX: 2, mazeY: 2, target: "Start", isError: true},
+		{x: 2, y: 1, mazeX: 2, mazeY: 2, target: "Start", isError: true},
+		{x: 0, y: -1, mazeX: 2, mazeY: 2, target: "Start", isError: true},
+		{x: 0, y: 2, mazeX: 2, mazeY: 2, target: "Start", isError: true},
+		{x: 2, y: 1, mazeX: 3, mazeY: 2, target: "Goal", isError: false},
 	}
 	var gotX int
 	var gotY int
@@ -34,13 +39,21 @@ func TestMazeSetter(t *testing.T) {
 		maze := NewMaze(tc.mazeY, tc.mazeX)
 		switch tc.target {
 		case "Start":
-			maze.SetStart(tc.x, tc.y)
+			err = maze.SetStart(tc.x, tc.y)
+			assert.Equal(t, tc.isError, err != nil)
+			if err != nil {
+				continue
+			}
 			gotX, gotY, err = maze.GetStart()
 			assert.Nil(t, err)
 			assert.Equal(t, tc.x, gotX)
 			assert.Equal(t, tc.y, gotY)
 		case "Goal":
-			maze.SetGoal(tc.x, tc.y)
+			err = maze.SetGoal(tc.x, tc.y)
+			assert.Equal(t, tc.isError, err != nil)
+			if err != nil {
+				continue
+			}
 			gotX, gotY, err = maze.GetGoal()
 			assert.Nil(t, err)
 			assert.Equal(t, tc.x, gotX)

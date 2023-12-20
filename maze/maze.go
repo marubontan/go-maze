@@ -40,8 +40,12 @@ func NewMaze(h, w int) *Maze {
 	return m
 }
 
-func (m *Maze) SetStart(x, y int) {
+func (m *Maze) SetStart(x, y int) error {
+	if x < 0 || x >= m.Width || y < 0 || y >= m.Height {
+		return errors.New("invalid start position")
+	}
 	m.Blocks[y][x] = Block{BlockType: Start}
+	return nil
 }
 
 func (m *Maze) GetStart() (int, int, error) {
@@ -55,8 +59,12 @@ func (m *Maze) GetStart() (int, int, error) {
 	return -1, -1, errors.New("start not found")
 }
 
-func (m *Maze) SetGoal(x, y int) {
+func (m *Maze) SetGoal(x, y int) error {
+	if x < 0 || x >= m.Width || y < 0 || y >= m.Height {
+		return errors.New("invalid goal position")
+	}
 	m.Blocks[y][x] = Block{BlockType: Goal}
+	return nil
 }
 
 func (m *Maze) GetGoal() (int, int, error) {
@@ -70,8 +78,12 @@ func (m *Maze) GetGoal() (int, int, error) {
 	return -1, -1, errors.New("goal not found")
 }
 
-func (m *Maze) SetObstacle(x, y int) {
+func (m *Maze) SetObstacle(x, y int) error {
+	if x < 0 || x >= m.Width || y < 0 || y >= m.Height {
+		return errors.New("invalid goal position")
+	}
 	m.Blocks[y][x] = Block{BlockType: Obstacle}
+	return nil
 }
 
 func drawHorizontalLine(w int) {
