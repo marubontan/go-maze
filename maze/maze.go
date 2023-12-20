@@ -20,7 +20,8 @@ const (
 )
 
 type Block struct {
-	BlockType int
+	BlockType  int
+	Attributes map[string]any
 }
 type Maze struct {
 	Height int
