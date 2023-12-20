@@ -1,6 +1,6 @@
 # go-maze [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 ## Overview
-`go-maze` is simple maze making library, expecting to be used for some algorithm and reinformemnt leaning experiments.
+`go-maze` is simple maze making library, expecting to be used for some algorithm and reinforcememnt leaning experiments.
 
 ## How to install
 ```
