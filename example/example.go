@@ -2,7 +2,8 @@ package main
 
 import (
 	"fmt"
-	"go-maze/maze"
+
+	"github.com/marubontan/go-maze"
 )
 
 func main() {
