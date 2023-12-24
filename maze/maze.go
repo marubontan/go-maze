@@ -87,6 +87,16 @@ func (m *Maze) SetObstacle(x, y int) error {
 	return nil
 }
 
+func (m *Maze) IsAvailable(x, y int) bool {
+	if x < 0 || x >= m.Width || y < 0 || y >= m.Height {
+		return false
+	}
+	if m.Blocks[y][x].BlockType == Obstacle {
+		return false
+	}
+	return true
+}
+
 func drawHorizontalLine(w int) {
 	for i := 0; i < w; i++ {
 		fmt.Print(" -")
