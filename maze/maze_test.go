@@ -125,3 +125,38 @@ func TestMazeExistPath(t *testing.T) {
 		assert.Equal(t, tc.reached, reached)
 	}
 }
+
+func TestMazeStep(t *testing.T) {
+	env := NewMaze(3, 3)
+	env.SetStart(0, 1)
+	env.SetTrap(1, 1)
+	env.SetGoal(2, 2)
+	env.SetGoalReward(1.0)
+	env.SetTrapPenalty(-1.0)
+
+	state := env.Reset()
+	assert.Equal(t, state, [2]int{0, 1})
+	nextState, isGoal, reward, err := env.Step(2)
+	assert.Equal(t, err, nil)
+	assert.Equal(t, nextState, [2]int{0, 1})
+	assert.Equal(t, isGoal, false)
+	assert.Equal(t, reward, 0.0)
+
+	nextState, isGoal, reward, err = env.Step(0)
+	assert.Equal(t, err, nil)
+	assert.Equal(t, nextState, [2]int{1, 1})
+	assert.Equal(t, isGoal, false)
+	assert.Equal(t, reward, -1.0)
+
+	nextState, isGoal, reward, err = env.Step(0)
+	assert.Equal(t, err, nil)
+	assert.Equal(t, nextState, [2]int{2, 1})
+	assert.Equal(t, isGoal, false)
+	assert.Equal(t, reward, 0.0)
+
+	nextState, isGoal, reward, err = env.Step(1)
+	assert.Equal(t, err, nil)
+	assert.Equal(t, nextState, [2]int{2, 2})
+	assert.Equal(t, isGoal, true)
+	assert.Equal(t, reward, 1.0)
+}
