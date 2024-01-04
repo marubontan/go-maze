@@ -134,13 +134,14 @@ func (m *Maze) Step(action int) ([2]int, bool, float64, error) {
 	return nextStateCandidate, isGoal, reward, nil
 }
 
-func (m *Maze) Reset() {
+func (m *Maze) Reset() [2]int {
 	x, y, err := m.GetStart()
 	if err != nil {
 		x, y = 0, 0
 		m.SetStart(x, y)
 	}
 	m.State = &[2]int{x, y}
+	return *m.State
 }
 
 func (m *Maze) IsAvailable(x, y int) bool {

@@ -19,4 +19,13 @@ func main() {
 	fmt.Printf("Path from start to goal: %t\n", maze.ExistPath())
 	fmt.Printf("Goal Reward: %f\n", *maze.GoalReward)
 	fmt.Printf("Trap Penalty: %f\n", *maze.TrapPenalty)
+	maze.Reset()
+	nextState, isGoal, reward, _ := maze.Step(0)
+	fmt.Printf("action: 0, NextState: %v, isGoal: %t, reward: %f\n", nextState, isGoal, reward)
+	nextState, isGoal, reward, _ = maze.Step(0)
+	fmt.Printf("action: 0, NextState: %v, isGoal: %t, reward: %f\n", nextState, isGoal, reward)
+	nextState, isGoal, reward, _ = maze.Step(1)
+	fmt.Printf("action: 1, NextState: %v, isGoal: %t, reward: %f\n", nextState, isGoal, reward)
+	nextState, isGoal, reward, _ = maze.Step(1)
+	fmt.Printf("action: 1, NextState: %v, isGoal: %t, reward: %f\n", nextState, isGoal, reward)
 }
